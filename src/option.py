@@ -17,33 +17,33 @@ parser.add_argument('--n_threads', type=int, default=0,
                     help='number of threads for data loading')
 parser.add_argument('--cpu', action='store_true',
                     help='use cpu only')
-parser.add_argument('--n_GPUs', type=int, default=1,
+parser.add_argument('--n_GPUs', type=int, default=2,
                     help='number of GPUs')
 parser.add_argument('--seed', type=int, default=1,
                     help='random seed')
 
 # Data specifications
-parser.add_argument('--dir_data', type=str, default='~/Datasets/',
+parser.add_argument('--dir_data', type=str, default='~/Downloads/human_x1.avi', #~/Downloads/human2.mp4, ~/Downloads/TraDeS/videos/human.mp4
                     help='dataset directory')
-parser.add_argument('--dir_demo', type=str, default='../test',
+parser.add_argument('--dir_demo', type=str, default='~/Downloads/human_x1.avi',
                     help='demo image directory')
 parser.add_argument('--data_train', type=str, default='DIV2K',
                     help='train dataset name')
-parser.add_argument('--data_test', type=str, default='DIV2K',
+parser.add_argument('--data_test', type=str, default='video', #Kist
                     help='test dataset name')
 parser.add_argument('--data_range', type=str, default='1-800/801-810',
                     help='train/test data range')
 parser.add_argument('--ext', type=str, default='sep',
                     help='dataset file extension. sep: store png files to .pt files, img: read png images')
-parser.add_argument('--scale', type=str, default='4',
+parser.add_argument('--scale', type=str, default='1',
                     help='super resolution scale')
 parser.add_argument('--patch_size', type=int, default=192,
                     help='output patch size')
-parser.add_argument('--rgb_range', type=int, default=255,
+parser.add_argument('--rgb_range', type=int, default=1,
                     help='maximum value of RGB')
 parser.add_argument('--n_colors', type=int, default=3,
                     help='number of color channels to use')
-parser.add_argument('--chop', action='store_true',
+parser.add_argument('--chop', default=False,
                     help='enable memory-efficient forward')
 parser.add_argument('--ch_shuffle', type=str, default='False', help='[Augmentation] channel shuffle of LR and HR')
 parser.add_argument('--lr_noise_sigma', type=float, default=0.0, help='[Augmentation] Apply Gaussian noise into LR image. Range = [0,255]')
@@ -51,14 +51,15 @@ parser.add_argument('--no_augment', action='store_true',
                     help='do not use data augmentation')
 
 # Model specifications
-parser.add_argument('--model', default='EDSR',
+parser.add_argument('--model', default='DeblurUNet',
                     help='model name')
 
 parser.add_argument('--normalization', type=str, default='None', 
                     help='normalization function. Ex) batch, instance ...')
 parser.add_argument('--act', type=str, default='relu',
                     help='activation function')
-parser.add_argument('--pre_train', type=str, default='',
+# print(os.path.join('../experiment', args.save, 'model/model_best_patch320_epoch374.pt'))
+parser.add_argument('--pre_train', type=str, default='./model_best_patch320_epoch374.pt',
                     help='pre-trained model directory')
 parser.add_argument('--extend', type=str, default='.',
                     help='pre-trained model directory')
@@ -89,13 +90,13 @@ parser.add_argument('--RDNconfig', type=str, default='B',
                     help='parameters config of RDN. (Use in RDN)')
 
 # Option for Residual channel attention network (RCAN)
-parser.add_argument('--n_resgroups', type=int, default=10,
+parser.add_argument('--n_resgroups', type=int, default=4,
                     help='number of residual groups')
 parser.add_argument('--reduction', type=int, default=16,
                     help='number of feature maps reduction')
 
 # Training specifications
-parser.add_argument('--reset', action='store_true',
+parser.add_argument('--reset', default=False, #'store_true'
                     help='reset the training')
 parser.add_argument('--test_every', type=int, default=1000,
                     help='do test per every N batches')
@@ -142,7 +143,7 @@ parser.add_argument('--skip_threshold', type=float, default='1e8',
                     help='skipping batch that has large error')
 
 # Log specifications
-parser.add_argument('--save', type=str, default='test',
+parser.add_argument('--save', type=str, default='deblur_jpeg/wrcan',
                     help='file name to save')
 parser.add_argument('--load', type=str, default='',
                     help='file name to load')
